@@ -11,6 +11,10 @@ As suas especificações se encontram na documentação do projeto
 
 https://docs.nestjs.com/
 
+Intruções de banco de dados:
+1. Instalar postgres na sua máquina (de preferência com o pgAdmin para facilitar configuração)
+2. Criar um server com um banco de dados "fatepark_database" (nesse database tem que ter um usuário com login "admin", senha "admin")
+
 Instruções de uso:
 
 1. instalar Node (versão 10 no mínimo)
