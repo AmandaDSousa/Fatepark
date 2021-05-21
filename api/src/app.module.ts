@@ -6,6 +6,11 @@ import { AppService } from './app.service';
 import {User} from "./user.entity";
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import {JwtModule} from "@nestjs/jwt";
+import {jwtConstants} from "./jwt.constants";
+import {AuthService} from "./auth.service";
+import {LocalStrategy} from "./local.strategy";
+import {JwtStrategy} from "./jwt.strategy";
 
 @Module({
   imports: [
@@ -20,9 +25,12 @@ import { UsersService } from './users.service';
       autoLoadEntities: true,
       synchronize: true
     }),
-    TypeOrmModule.forFeature([User])
+    TypeOrmModule.forFeature([User]),
+    JwtModule.register({
+      secret: jwtConstants.secret
+    })
   ],
   controllers: [AppController, UsersController],
-  providers: [AppService, UsersService],
+  providers: [LocalStrategy, JwtStrategy, AuthService, AppService, UsersService],
 })
 export class AppModule {}
