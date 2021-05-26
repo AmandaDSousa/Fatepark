@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Button, Col, Drawer, message, Row, Table, Typography} from "antd";
+import {Button, Col, Drawer, message, Row, Space, Table, Typography} from "antd";
 import {usersService} from "../services/usersService";
 import {UserForm} from "./UserForm";
 
@@ -24,9 +24,10 @@ export function Users() {
       title: "Ações",
       dataIndex: "",
       render: (_, record) => (
-        <div>
+        <Space>
           <a onClick={() => onEdit(record)}>Editar</a>
-        </div>
+          <a onClick={() => onDelete(record)}>Excluir</a>
+        </Space>
       )
     }
   ]
@@ -56,6 +57,17 @@ export function Users() {
   function onEdit(record) {
     setEditingUser(record);
     setShowDrawer(true);
+  }
+
+  async function onDelete(record) {
+    try {
+      message.info("Excluindo usuário");
+      await usersService().deleteUser(record.id);
+      message.success("Usuário excluído com sucesso");
+      await getUsers(currentPage);
+    } catch {
+      message.error("Falha ao excluir usuário");
+    }
   }
 
   async function onDrawerClose() {

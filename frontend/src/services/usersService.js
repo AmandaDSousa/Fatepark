@@ -19,5 +19,9 @@ export function usersService() {
     return apiBaseService.put(`${resource}/${user.id}`, user);
   }
 
-  return { getAllPaged, create, update }
+  function deleteUser(id) {
+    return apiBaseService.delete(`${resource}/${id}`);
+  }
+
+  return { getAllPaged, create, update, deleteUser }
 }
