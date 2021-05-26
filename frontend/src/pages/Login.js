@@ -1,6 +1,8 @@
 import {useLocation, useHistory} from "react-router-dom";
+import {Button, Form, Input, Typography, message} from "antd";
 
 import {useAuth} from "../hooks/useAuth";
+import {authService} from "../services/authService";
 
 export function Login() {
   const auth = useAuth();
@@ -9,20 +11,41 @@ export function Login() {
 
   const { from } = location.state || { from: { pathname: "/" } };
 
-  function handleLogin(event) {
-    event.preventDefault();
+  async function onFinish(values) {
+    try {
+      const token = await authService().login(values);
 
-    auth.login({ email: "takato@fatepark.com", password: "12345" }, () => history.replace(from));
+      auth.login(token, () => history.replace(from));
+    } catch {
+      message.error("Falha ao realizar login");
+    }
   }
-
 
   return (
     <div>
-      <h1>Login</h1>
+      <Typography.Title>Fatepark</Typography.Title>
 
-      <button onClick={handleLogin}>
-        Entrar
-      </button>
+      <Form name="login" onFinish={onFinish}>
+        <Form.Item
+          label="E-mail"
+          name="email"
+          rules={[{ required: true, message: 'E-mail é obrigatório' }, { type: "email", message: "E-mail inválido" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Senha"
+          name="password"
+          rules={[{ required: true, message: 'Senha é obrigatória' }, { min: 5, message: "A senha deve conter no mínimo 5 caracteres" }]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit">Entrar</Button>
+        </Form.Item>
+      </Form>
     </div>
   )
 }
