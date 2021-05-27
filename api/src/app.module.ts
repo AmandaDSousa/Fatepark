@@ -11,6 +11,9 @@ import {jwtConstants} from "./constants/jwt.constants";
 import {AuthService} from "./services/auth.service";
 import {LocalStrategy} from "./strategies/local.strategy";
 import {JwtStrategy} from "./strategies/jwt.strategy";
+import {CustomersService} from "./services/customers.service";
+import {CustomersController} from "./controllers/customers.controller";
+import {Customer} from "./entities/customer.entity";
 
 @Module({
   imports: [
@@ -25,12 +28,12 @@ import {JwtStrategy} from "./strategies/jwt.strategy";
       autoLoadEntities: true,
       synchronize: true
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Customer]),
     JwtModule.register({
       secret: jwtConstants.secret
     })
   ],
-  controllers: [AppController, UsersController],
-  providers: [LocalStrategy, JwtStrategy, AuthService, AppService, UsersService],
+  controllers: [AppController, UsersController, CustomersController],
+  providers: [LocalStrategy, JwtStrategy, AuthService, AppService, UsersService, CustomersService],
 })
 export class AppModule {}
