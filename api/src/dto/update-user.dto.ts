@@ -1,6 +1,6 @@
 import {IsEmail, IsNotEmpty} from "class-validator";
 
-import {UserTypeEnum} from "./user-type.enum";
+import {UserTypeEnum} from "../enums/user-type.enum";
 
 export class UpdateUserDto {
   @IsNotEmpty({ message: "Nome é obrigatório" })

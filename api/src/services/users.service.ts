@@ -3,10 +3,10 @@ import {FindManyOptions, Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 
-import {User} from "./user.entity";
-import {CreateUserDto} from "./create-user.dto";
-import {UpdateUserDto} from "./update-user.dto";
-import {cryptConstants} from "./crypt.constants";
+import {User} from "../entities/user.entity";
+import {CreateUserDto} from "../dto/create-user.dto";
+import {UpdateUserDto} from "../dto/update-user.dto";
+import {cryptConstants} from "../constants/crypt.constants";
 
 @Injectable()
 export class UsersService {

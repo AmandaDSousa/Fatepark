@@ -1,6 +1,6 @@
 import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn} from "typeorm";
 
-import {UserTypeEnum} from "./user-type.enum";
+import {UserTypeEnum} from "../enums/user-type.enum";
 
 @Entity()
 export class User {
