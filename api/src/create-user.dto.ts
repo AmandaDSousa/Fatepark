@@ -1,5 +1,7 @@
 import {IsEmail, IsNotEmpty} from "class-validator";
 
+import {UserTypeEnum} from "./user-type.enum";
+
 export class CreateUserDto {
   @IsNotEmpty({ message: "Nome é obrigatório" })
   name: string;
@@ -9,5 +11,8 @@ export class CreateUserDto {
 
   @IsNotEmpty({ message: "Senha é obrigatória" })
   password: string;
+
+  @IsNotEmpty({ message: "Tipo é obrigatório" })
+  type: UserTypeEnum;
 }
 

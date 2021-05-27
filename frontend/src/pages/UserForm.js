@@ -1,7 +1,10 @@
 import {useEffect, useState} from "react";
-import {Button, Form, Input, message} from "antd";
+import {Button, Form, Input, message, Select} from "antd";
 
 import {usersService} from "../services/usersService";
+import {UserTypes} from "../enums/user-types";
+
+const { Option } = Select;
 
 export function UserForm({ user }) {
   const [form] = Form.useForm();
@@ -61,6 +64,20 @@ export function UserForm({ user }) {
         rules={[{ required: true, message: 'E-mail é obrigatório' }, { type: "email", message: "E-mail inválido" }]}
       >
         <Input />
+      </Form.Item>
+      <Form.Item
+        label="Tipo"
+        name="type"
+        rules={[{ required: true, message: 'Tipo é obrigatório' }]}
+      >
+        <Select
+          placeholder="Select a option and change input text above"
+          allowClear
+        >
+          <Option value={UserTypes.Administrativo}>Administrativo</Option>
+          <Option value={UserTypes.Financeiro}>Financeiro</Option>
+          <Option value={UserTypes.Operacional}>Operacional</Option>
+        </Select>
       </Form.Item>
       {user === null && (
         <Form.Item

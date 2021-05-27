@@ -2,8 +2,15 @@ import {useEffect, useState} from "react";
 import {Button, Col, Drawer, message, Row, Space, Table, Typography} from "antd";
 import {usersService} from "../services/usersService";
 import {UserForm} from "./UserForm";
+import {UserTypes} from "../enums/user-types";
 
 const PAGE_SIZE = 10;
+
+const userTypeDescriptions = {
+  [UserTypes.Administrativo]: "Administrativo",
+  [UserTypes.Financeiro]: "Financeiro",
+  [UserTypes.Operacional]: "Operacional",
+}
 
 export function Users() {
   const [loading, setLoading] = useState(true);
@@ -20,6 +27,11 @@ export function Users() {
   const columns = [
     { title: "Nome", dataIndex: "name" },
     { title: "E-mail", dataIndex: "email" },
+    {
+      title: "Tipo",
+      dataIndex: "type",
+      render: (_, record) => userTypeDescriptions[record.type]
+    },
     {
       title: "Ações",
       dataIndex: "",

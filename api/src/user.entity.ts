@@ -1,9 +1,18 @@
 import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn} from "typeorm";
 
+import {UserTypeEnum} from "./user-type.enum";
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({
+    type: "enum",
+    enum: UserTypeEnum,
+    default: UserTypeEnum.Operacional
+  })
+  type!: UserTypeEnum;
 
   @Column()
   name: string;
