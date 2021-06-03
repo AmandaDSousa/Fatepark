@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
+import {Module} from '@nestjs/common';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {JwtModule} from "@nestjs/jwt";
 
-import { AppController } from './controllers/app.controller';
-import { AppService } from './services/app.service';
+import {AppController} from './controllers/app.controller';
+import {AppService} from './services/app.service';
 import {User} from "./entities/user.entity";
-import { UsersController } from './controllers/users.controller';
-import { UsersService } from './services/users.service';
+import {UsersController} from './controllers/users.controller';
+import {UsersService} from './services/users.service';
 import {jwtConstants} from "./constants/jwt.constants";
 import {AuthService} from "./services/auth.service";
 import {LocalStrategy} from "./strategies/local.strategy";
@@ -18,6 +18,8 @@ import {ParkingPlace} from "./entities/parking-place.entity";
 import {Partner} from "./entities/partner.entity";
 import {ParkingPlacesService} from "./services/parking-places.service";
 import {DatabaseProviderModule} from "./database-provider.module";
+import {ParkingPlacesController} from "./controllers/parking-places.controller";
+import {PartnersService} from "./services/partners-service";
 
 @Module({
   imports: [
@@ -27,7 +29,8 @@ import {DatabaseProviderModule} from "./database-provider.module";
       secret: jwtConstants.secret
     })
   ],
-  controllers: [AppController, UsersController, CustomersController],
-  providers: [LocalStrategy, JwtStrategy, AuthService, AppService, UsersService, CustomersService, ParkingPlacesService],
+  controllers: [AppController, UsersController, CustomersController, ParkingPlacesController],
+  providers: [LocalStrategy, JwtStrategy, AuthService, AppService, UsersService, CustomersService, ParkingPlacesService, PartnersService],
 })
-export class AppModule {}
+export class AppModule {
+}
