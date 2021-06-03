@@ -8,7 +8,7 @@ export class Partner {
   @Column()
   name: string;
 
-  @Column({ type: "double" })
+  @Column({ type: "double precision" })
   discount: number;
 
   @Column({ default: true })
