@@ -22,6 +22,7 @@ import {ParkingPlacesController} from "./controllers/parking-places.controller";
 import {PartnersService} from "./services/partners-service";
 import {ParkingLog} from "./entities/parking-log.entity";
 import {ParkingLogsService} from "./services/parking-logs.service";
+import {ParkingLogsController} from "./controllers/parking-logs.controller";
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import {ParkingLogsService} from "./services/parking-logs.service";
       secret: jwtConstants.secret
     })
   ],
-  controllers: [AppController, UsersController, CustomersController, ParkingPlacesController],
+  controllers: [AppController, UsersController, CustomersController, ParkingPlacesController, ParkingLogsController],
   providers: [LocalStrategy, JwtStrategy, AuthService, AppService, UsersService, CustomersService, ParkingPlacesService, PartnersService, ParkingLogsService],
 })
 export class AppModule {
