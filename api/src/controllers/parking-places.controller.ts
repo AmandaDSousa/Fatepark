@@ -71,8 +71,8 @@ export class ParkingPlacesController {
 
       if (parkingPlace.isOccupied && !isOccupied) {
         const exitTime = new Date();
-        const usedHours = Math.abs(exitTime.getTime() - parkingPlace.entranceTime.getTime()) / 1000 / 3600;
-        const totalValue = usedHours * PARKING_HOUR_VALUE;
+        const usedHours = Math.ceil(Math.abs(exitTime.getTime() - parkingPlace.entranceTime.getTime()) / 1000 / 3600);
+        const totalValue = (usedHours * PARKING_HOUR_VALUE) - partner.discount;
         const createParkingLogDto = new CreateParkingLogDto(type, partner.discount, totalValue, parkingPlace.entranceTime, exitTime);
 
         await this.parkingLogsService.create(createParkingLogDto, customer, partner);

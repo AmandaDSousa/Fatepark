@@ -1,4 +1,4 @@
-import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 
 import {Customer} from "./customer.entity";
 import {ParkingType} from "../enums/parking-type.enum";
@@ -17,11 +17,11 @@ export class ParkingLog {
   })
   type!: ParkingType;
 
-  @OneToOne(() => Customer)
+  @ManyToOne(() => Customer)
   @JoinColumn()
   customer?: Customer;
 
-  @OneToOne(() => Partner)
+  @ManyToOne(() => Partner)
   @JoinColumn()
   partner?: Partner;
 
