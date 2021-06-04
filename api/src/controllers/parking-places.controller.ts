@@ -68,11 +68,16 @@ export class ParkingPlacesController {
       if (partnerId && partner === null)
         return new BadRequestException("Não existe convênio com esse id");
 
-      const updatingParkingPlace: ParkingPlace = {...parkingPlace, type, isOccupied, entranceTime: new Date()};
+      const isGettingOut = parkingPlace.isOccupied && !isOccupied;
+
+      const updatingParkingPlace: ParkingPlace =
+        isGettingOut
+          ? {...parkingPlace, type: null, isOccupied: false, entranceTime: null}
+          : {...parkingPlace, type, isOccupied: true, entranceTime: new Date()}
 
       await this.parkingPlacesService.update(updatingParkingPlace, customer, partner);
 
-      if (parkingPlace.isOccupied && !isOccupied) {
+      if (isGettingOut) {
         const exitTime = new Date();
         const usedHours = Math.ceil(Math.abs(exitTime.getTime() - parkingPlace.entranceTime.getTime()) / 1000 / 3600);
         const totalValue = (usedHours * PARKING_HOUR_VALUE) - partner.discount;
