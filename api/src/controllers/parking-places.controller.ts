@@ -55,7 +55,8 @@ export class ParkingPlacesController {
       if (!parkingPlace)
         return new BadRequestException("Não existe vaga com esse id");
 
-      const updatingParkingPlace: ParkingPlace = {...parkingPlace, type, isOccupied, entranceTime: new Date()};
+      if (isOccupied && !customerId)
+        return new BadRequestException("Cliente é obrigatório para ocupar a vaga");
 
       const customer: Customer = customerId ? await this.customersService.getById(customerId) : null;
 
@@ -66,6 +67,8 @@ export class ParkingPlacesController {
 
       if (partnerId && partner === null)
         return new BadRequestException("Não existe convênio com esse id");
+
+      const updatingParkingPlace: ParkingPlace = {...parkingPlace, type, isOccupied, entranceTime: new Date()};
 
       await this.parkingPlacesService.update(updatingParkingPlace, customer, partner);
 
