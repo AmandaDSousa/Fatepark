@@ -5,9 +5,9 @@ export class UpdateParkingPlaceDto {
 
   partnerId: number;
 
-  vehicle: string;
+  vehicle?: string;
 
-  vehiclePlate: string;
+  vehiclePlate?: string;
 
   type?: ParkingType;
 

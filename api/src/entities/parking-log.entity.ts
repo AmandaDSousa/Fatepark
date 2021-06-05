@@ -17,6 +17,12 @@ export class ParkingLog {
   })
   type!: ParkingType;
 
+  @Column()
+  vehicle: string;
+
+  @Column()
+  vehiclePlate: string;
+
   @ManyToOne(() => Customer)
   @JoinColumn()
   customer?: Customer;

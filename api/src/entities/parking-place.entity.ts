@@ -17,10 +17,10 @@ export class ParkingPlace {
   })
   type!: ParkingType;
 
-  @Column()
+  @Column({nullable: true})
   vehicle: string;
 
-  @Column()
+  @Column({nullable: true})
   vehiclePlate: string;
 
   @OneToOne(() => Customer)
@@ -31,9 +31,9 @@ export class ParkingPlace {
   @JoinColumn()
   partner?: Partner;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({type: 'timestamp', nullable: true})
   entranceTime?: Date;
 
-  @Column({ default: false })
+  @Column({default: false})
   isOccupied: boolean;
 }

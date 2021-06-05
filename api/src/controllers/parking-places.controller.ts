@@ -69,7 +69,7 @@ export class ParkingPlacesController {
 
       const updatingParkingPlace: ParkingPlace =
         isGettingOut
-          ? {...parkingPlace, type: null, vehicle, vehiclePlate, isOccupied: false, entranceTime: null}
+          ? {...parkingPlace, type: null, vehicle: null, vehiclePlate: null, isOccupied: false, entranceTime: null}
           : {...parkingPlace, type, vehicle, vehiclePlate, isOccupied: true, entranceTime: new Date()}
 
       await this.parkingPlacesService.update(updatingParkingPlace, customer, partner);
