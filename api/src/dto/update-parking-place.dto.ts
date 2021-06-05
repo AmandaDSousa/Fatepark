@@ -5,6 +5,10 @@ export class UpdateParkingPlaceDto {
 
   partnerId: number;
 
+  vehicle: string;
+
+  vehiclePlate: string;
+
   type?: ParkingType;
 
   isOccupied: boolean;

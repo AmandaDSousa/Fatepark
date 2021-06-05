@@ -17,6 +17,12 @@ export class ParkingPlace {
   })
   type!: ParkingType;
 
+  @Column()
+  vehicle: string;
+
+  @Column()
+  vehiclePlate: string;
+
   @OneToOne(() => Customer)
   @JoinColumn()
   customer?: Customer;

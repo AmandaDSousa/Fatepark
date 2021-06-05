@@ -48,15 +48,12 @@ export class ParkingPlacesController {
     @Body() updateDto: UpdateParkingPlaceDto
   ) {
     try {
-      const {customerId, partnerId, type, isOccupied} = updateDto;
+      const {customerId, partnerId, type, vehicle, vehiclePlate, isOccupied} = updateDto;
 
       const parkingPlace = await this.parkingPlacesService.getById(id);
 
       if (!parkingPlace)
         return new BadRequestException("Não existe vaga com esse id");
-
-      if (isOccupied && !customerId)
-        return new BadRequestException("Cliente é obrigatório para ocupar a vaga");
 
       const customer: Customer = customerId ? await this.customersService.getById(customerId) : null;
 
@@ -72,8 +69,8 @@ export class ParkingPlacesController {
 
       const updatingParkingPlace: ParkingPlace =
         isGettingOut
-          ? {...parkingPlace, type: null, isOccupied: false, entranceTime: null}
-          : {...parkingPlace, type, isOccupied: true, entranceTime: new Date()}
+          ? {...parkingPlace, type: null, vehicle, vehiclePlate, isOccupied: false, entranceTime: null}
+          : {...parkingPlace, type, vehicle, vehiclePlate, isOccupied: true, entranceTime: new Date()}
 
       await this.parkingPlacesService.update(updatingParkingPlace, customer, partner);
 
