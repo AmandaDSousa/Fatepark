@@ -3,8 +3,6 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Connection, FindManyOptions, Repository} from "typeorm";
 
 import {ParkingPlace} from "../entities/parking-place.entity";
-import {Customer} from "../entities/customer.entity";
-import {Partner} from "../entities/partner.entity";
 
 @Injectable()
 export class ParkingPlacesService {
