@@ -5,10 +5,10 @@ import {
   Delete,
   Get,
   InternalServerErrorException,
-  Param,
+  Param, ParseBoolPipe,
   ParseIntPipe,
   Post,
-  Put
+  Put, Query
 } from '@nestjs/common';
 
 import {CustomersService} from "../services/customers.service";
@@ -20,10 +20,21 @@ export class CustomersController {
   constructor(private customersService: CustomersService) {
   }
 
-  @Get(":page/:perPage")
+  @Get()
   getAll(
+    @Query('paid', ParseBoolPipe) paid?: boolean
+  ) {
+    try {
+      return this.customersService.getAll(paid);
+    } catch (e) {
+      return new InternalServerErrorException(e);
+    }
+  }
+
+  @Get(":page/:perPage")
+  getAllPaged(
     @Param("page", ParseIntPipe) page: number,
-    @Param("perPage", ParseIntPipe) perPage: number
+    @Param("perPage", ParseIntPipe) perPage: number,
   ) {
     try {
       return this.customersService.getPaged(page, perPage);

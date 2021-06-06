@@ -5,6 +5,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Customer} from "../entities/customer.entity";
 import {CreateCustomerDto} from "../dto/create-customer.dto";
 import {UpdateCustomerDto} from "../dto/update-customer.dto";
+import {Payment} from "../entities/payment.entity";
 
 @Injectable()
 export class CustomersService {
@@ -29,13 +30,31 @@ export class CustomersService {
     return this.customersRepository.findAndCount(options);
   }
 
-  getById (id: number): Promise<Customer> {
-    return this.customersRepository.findOne({ where: { id } });
+  async getAll(paid: boolean): Promise<{ name: string, cpf: string }[]> {
+    const selectColumns:(keyof Customer)[] = ["name", "cpf"];
+
+    if (paid) {
+      return this.customersRepository
+        .createQueryBuilder("customer")
+        .select(selectColumns)
+        .innerJoin(Payment, "payment", "payment.customerId=customer.id")
+        .where("\"isActive\" = true")
+        .andWhere("start <= CURRENT_DATE")
+        .andWhere("\"end\" >= CURRENT_DATE")
+        .printSql()
+        .getRawMany();
+    }
+
+    return this.customersRepository.find({ select: selectColumns, where: { isActive: true } });
+  }
+
+  getById(id: number): Promise<Customer> {
+    return this.customersRepository.findOne({where: {id}});
   }
 
   async create(createCustomerDto: CreateCustomerDto): Promise<number> {
     const result = await this.customersRepository.insert(createCustomerDto);
-    const [{ id }] = result.identifiers;
+    const [{id}] = result.identifiers;
 
     return id;
   }
@@ -45,6 +64,6 @@ export class CustomersService {
   }
 
   async delete(id: number): Promise<void> {
-    await this.customersRepository.update(id, { isActive: false });
+    await this.customersRepository.update(id, {isActive: false});
   }
 }

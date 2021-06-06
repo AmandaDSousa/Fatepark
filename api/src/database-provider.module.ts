@@ -12,6 +12,7 @@ import {TypeOrmModule} from "@nestjs/typeorm";
       database: "fatepark_database",
       entities: [],
       autoLoadEntities: true,
+      logging: true,
       synchronize: true
     }),
   ]
