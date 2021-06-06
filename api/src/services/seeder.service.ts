@@ -11,7 +11,7 @@ export class SeederService {
   }
 
   async seedParkingPlaces(): Promise<void> {
-    const parkingPlaces = Array(40).fill(new ParkingPlace());
+    const parkingPlaces = Array(50).fill(new ParkingPlace());
     await this.parkingPlacesService.createMany(parkingPlaces);
   }
 }
