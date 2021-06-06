@@ -23,17 +23,36 @@ import {PartnersService} from "./services/partners-service";
 import {ParkingLog} from "./entities/parking-log.entity";
 import {ParkingLogsService} from "./services/parking-logs.service";
 import {ParkingLogsController} from "./controllers/parking-logs.controller";
+import {Payment} from "./entities/payment.entity";
+import {PaymentsController} from "./controllers/payments.controller";
+import {PaymentsService} from "./services/payments.service";
 
 @Module({
   imports: [
     DatabaseProviderModule,
-    TypeOrmModule.forFeature([User, Customer, ParkingPlace, Partner, ParkingLog]),
+    TypeOrmModule.forFeature([User, Customer, ParkingPlace, Partner, ParkingLog, Payment]),
     JwtModule.register({
       secret: jwtConstants.secret
     })
   ],
-  controllers: [AppController, UsersController, CustomersController, ParkingPlacesController, ParkingLogsController],
-  providers: [LocalStrategy, JwtStrategy, AuthService, AppService, UsersService, CustomersService, ParkingPlacesService, PartnersService, ParkingLogsService],
+  controllers: [
+    AppController,
+    UsersController,
+    CustomersController,
+    ParkingPlacesController,
+    ParkingLogsController,
+    PaymentsController
+  ],
+  providers: [
+    LocalStrategy,
+    JwtStrategy,
+    AuthService, AppService,
+    UsersService, CustomersService,
+    ParkingPlacesService,
+    PartnersService,
+    ParkingLogsService,
+    PaymentsService
+  ],
 })
 export class AppModule {
 }
