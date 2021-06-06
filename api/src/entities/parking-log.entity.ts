@@ -31,7 +31,7 @@ export class ParkingLog {
   @JoinColumn()
   partner?: Partner;
 
-  @Column({ type: "double precision" })
+  @Column({ type: "double precision", nullable: true })
   discountValue: number;
 
   @Column({ type: "double precision"})
