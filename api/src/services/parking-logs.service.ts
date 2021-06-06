@@ -3,8 +3,6 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {FindManyOptions, Repository} from "typeorm";
 
 import {ParkingLog} from "../entities/parking-log.entity";
-import {Partner} from "../entities/partner.entity";
-import {Customer} from "../entities/customer.entity";
 import {CreateParkingLogDto} from "../dto/create-parking-log.dto";
 
 @Injectable()
@@ -29,7 +27,8 @@ export class ParkingLogsService {
     return this.parkingLogsRepository.findAndCount(options);
   }
 
-  async create(createDto: CreateParkingLogDto, customer?: Customer, partner?: Partner): Promise<void> {
-    await this.parkingLogsRepository.insert({ ...createDto, customer, partner });
+  async create(createDto: CreateParkingLogDto): Promise<void> {
+    await this.parkingLogsRepository.insert(createDto);
+    return;
   }
 }

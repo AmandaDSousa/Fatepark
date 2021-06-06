@@ -11,12 +11,12 @@ import {
 
 import {ParkingPlacesService} from "../services/parking-places.service";
 import {UpdateParkingPlaceDto} from "../dto/update-parking-place.dto";
-import {CustomersService} from "../services/customers.service";
 import {Customer} from "../entities/customer.entity";
+import {Partner} from "../entities/partner.entity";
+import {CustomersService} from "../services/customers.service";
 import {PartnersService} from "../services/partners-service";
 import {ParkingLogsService} from "../services/parking-logs.service";
 import {CreateParkingLogDto} from "../dto/create-parking-log.dto";
-import {ParkingPlace} from "../entities/parking-place.entity";
 
 const PARKING_HOUR_VALUE = 10;
 
@@ -48,39 +48,55 @@ export class ParkingPlacesController {
     @Body() updateDto: UpdateParkingPlaceDto
   ) {
     try {
-      const {customerId, partnerId, type, vehicle, vehiclePlate, isOccupied} = updateDto;
-
+      const {customerId, partnerId, type, isOccupied} = updateDto;
       const parkingPlace = await this.parkingPlacesService.getById(id);
 
       if (!parkingPlace)
         return new BadRequestException("Não existe vaga com esse id");
 
       const customer: Customer = customerId ? await this.customersService.getById(customerId) : null;
+      const partner: Partner = partnerId ? await this.partnersService.getById(partnerId) : null;
 
-      if (customerId && customer === null)
+      if (customerId && !customer)
         return new BadRequestException("Não existe cliente com esse id");
 
-      const partner = partnerId ? await this.partnersService.getById(partnerId) : null;
-
-      if (partnerId && partner === null)
+      if (partnerId && !partner)
         return new BadRequestException("Não existe convênio com esse id");
 
-      const isGettingOut = parkingPlace.isOccupied && !isOccupied;
-
-      const updatingParkingPlace: ParkingPlace =
-        isGettingOut
-          ? {...parkingPlace, type: null, vehicle: null, vehiclePlate: null, isOccupied: false, entranceTime: null}
-          : {...parkingPlace, type, vehicle, vehiclePlate, isOccupied: true, entranceTime: new Date()}
-
-      await this.parkingPlacesService.update(updatingParkingPlace, customer, partner);
+      const isGettingOut = parkingPlace.isOccupied && !isOccupied
+      const vehicle = customer ? customer.vehicle : updateDto.vehicle;
+      const vehiclePlate = customer ? customer.vehiclePlate : updateDto.vehiclePlate;
 
       if (isGettingOut) {
-        const exitTime = new Date();
-        const usedHours = Math.ceil(Math.abs(exitTime.getTime() - parkingPlace.entranceTime.getTime()) / 1000 / 3600);
-        const totalValue = (usedHours * PARKING_HOUR_VALUE) - partner.discount;
-        const createParkingLogDto = new CreateParkingLogDto(type, partner.discount, totalValue, parkingPlace.entranceTime, exitTime);
+        await this.parkingPlacesService.update({
+          ...parkingPlace,
+          customer: null,
+          partner: null,
+          type: null,
+          vehicle: null,
+          vehiclePlate: null,
+          isOccupied: false,
+          entranceTime: null
+        });
 
-        await this.parkingLogsService.create(createParkingLogDto, customer, partner);
+        const entranceTime = parkingPlace.entranceTime;
+        const exitTime = new Date();
+        const usedHours = Math.ceil(Math.abs(exitTime.getTime() - entranceTime.getTime()) / 1000 / 3600);
+        const totalValue = (usedHours * PARKING_HOUR_VALUE) - partner?.discount;
+        const createParkingLogDto = new CreateParkingLogDto(customer, partner, type, vehicle, vehiclePlate, totalValue, entranceTime, exitTime);
+
+        await this.parkingLogsService.create(createParkingLogDto);
+      } else {
+        await this.parkingPlacesService.update({
+          ...parkingPlace,
+          customer,
+          partner,
+          type,
+          vehicle,
+          vehiclePlate,
+          isOccupied: true,
+          entranceTime: new Date()
+        });
       }
 
       return "Vaga atualizada com sucesso";

@@ -33,10 +33,9 @@ export class ParkingPlacesService {
     return this.parkingPlacesRepository.findOne({ where: { id } });
   }
 
-  async update(parkingPlace: ParkingPlace, customer?: Customer, partner?: Partner): Promise<void> {
-    const updatedParkingPlace: ParkingPlace = { ...parkingPlace, customer, partner };
-
-    await this.parkingPlacesRepository.update(parkingPlace.id, updatedParkingPlace);
+  async update(parkingPlace: ParkingPlace): Promise<void> {
+    await this.parkingPlacesRepository.update(parkingPlace.id, parkingPlace);
+    return;
   }
 
   async createMany(parkingPlaces: ParkingPlace[]): Promise<void> {
