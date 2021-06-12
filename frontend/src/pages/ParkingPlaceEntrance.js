@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
-import {Button, Form, Input, message, Select, Radio, Space} from "antd";
+import {Button, Form, Input, message, Radio, Space} from "antd";
+import MaskedInput from 'antd-mask-input'
 import {ParkingType} from "../enums/parking-type";
 import {parkingPlacesService} from "../services/parkingPlacesService";
 
@@ -77,7 +78,7 @@ export function ParkingPlaceEntrance({ parkingPlace, onFinish }) {
               name="vehiclePlate"
               rules={[{ required: true, message: 'Placa é obrigatório' }]}
             >
-              <Input />
+              <MaskedInput mask="AAA-1111" />
             </Form.Item>
 
             <Form.Item>
