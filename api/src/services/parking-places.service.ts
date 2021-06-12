@@ -31,6 +31,13 @@ export class ParkingPlacesService {
     return this.parkingPlacesRepository.findAndCount(options);
   }
 
+  async getOccupiedRelation() {
+    const occupiedCount = await this.parkingPlacesRepository.count({ where: { isOccupied: true } })
+    const totalCount = await this.parkingPlacesRepository.count()
+
+    return { occupiedCount, totalCount }
+  }
+
   getById (id: number): Promise<ParkingPlace> {
     return this.parkingPlacesRepository.findOne({ where: { id }, relations: ['customer'] });
   }

@@ -44,6 +44,15 @@ export class ParkingPlacesController {
     }
   }
 
+  @Get("occupied-relation")
+  async getOccupiedRelation() {
+    try {
+      return await this.parkingPlacesService.getOccupiedRelation();
+    } catch (e) {
+      return new InternalServerErrorException(e);
+    }
+  }
+
   @Put(":id")
   async update(
     @Param("id", ParseIntPipe) id: number,
