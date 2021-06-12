@@ -22,10 +22,10 @@ export function Login() {
   }
 
   return (
-    <div>
-      <Typography.Title>Fatepark</Typography.Title>
+    <div style={{ padding: 20 }}>
+      <Typography.Title style={{ marginBottom: 40 }}>Fatepark</Typography.Title>
 
-      <Form name="login" onFinish={onFinish}>
+      <Form name="login" wrapperCol={{ span: 8 }} onFinish={onFinish}>
         <Form.Item
           label="E-mail"
           name="email"
