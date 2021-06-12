@@ -4,10 +4,11 @@ import {ProvideAuth} from "./providers/ProvideAuth";
 import {Login} from "./pages/Login";
 
 import './App.css';
-import {PrivateRoute} from "./components/PrivateRoute";
-import {Users} from "./pages/Users";
-import {LoginRoute} from "./components/LoginRoute";
 import {AppLayout} from "./layouts/AppLayout/AppLayout";
+import {PrivateRoute} from "./components/PrivateRoute";
+import {LoginRoute} from "./components/LoginRoute";
+import {Users} from "./pages/Users";
+import {ParkingPlaces} from "./pages/ParkingPlaces";
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
               <AppLayout>
                 <Switch>
                   <PrivateRoute path={"/"} exact>
+                    <ParkingPlaces/>
+                  </PrivateRoute>
+                  <PrivateRoute path={"/users"} exact>
                     <Users/>
                   </PrivateRoute>
                 </Switch>

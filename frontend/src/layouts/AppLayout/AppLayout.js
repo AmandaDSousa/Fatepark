@@ -1,15 +1,19 @@
 import {useState} from "react";
 import {useHistory} from "react-router-dom";
 import {Menu, Layout} from "antd";
-import {UserOutlined} from "@ant-design/icons";
+import {CarOutlined, UserOutlined} from "@ant-design/icons";
 
 import "./AppLayout.css";
 import {useAuth} from "../../hooks/useAuth";
 
 const menus = {
+  parkingPlaces: {
+    key: "parking-places",
+    route: ""
+  },
   users: {
     key: "users",
-    route: ""
+    route: "users"
   }
 }
 
@@ -30,6 +34,9 @@ export function AppLayout({ children }) {
   return (
     <Layout>
       <Menu selectedKeys={[currentMenu]} mode="horizontal">
+        <Menu.Item onClick={() => handleClick(menus.parkingPlaces)} key={menus.parkingPlaces.key} icon={<CarOutlined />}>
+          Vagas
+        </Menu.Item>
         <Menu.Item onClick={() => handleClick(menus.users)} key={menus.users.key} icon={<UserOutlined />}>
           Usuários
         </Menu.Item>
