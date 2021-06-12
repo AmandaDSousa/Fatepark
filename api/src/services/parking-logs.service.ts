@@ -18,8 +18,7 @@ export class ParkingLogsService {
       take: perPage,
       skip: page === 1 ? 0 : perPage * (page - 1),
       order: {
-        id: "ASC",
-        entranceTime: "DESC"
+        exitTime: "DESC"
       },
       relations: ["customer", "partner"]
     };
