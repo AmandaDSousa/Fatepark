@@ -3,6 +3,7 @@ import {Customer} from "../entities/customer.entity";
 import {Partner} from "../entities/partner.entity";
 
 export class CreateParkingLogDto {
+  parkingPlaceId: number;
   customer: Customer;
   partner: Partner;
   type: ParkingType;
@@ -14,6 +15,7 @@ export class CreateParkingLogDto {
   exitTime: Date;
 
   constructor(
+    parkingPlaceId: number,
     customer: Customer,
     partner: Partner,
     type: ParkingType,
@@ -23,6 +25,7 @@ export class CreateParkingLogDto {
     entranceTime: Date,
     exitTime: Date
   ) {
+    this.parkingPlaceId = parkingPlaceId;
     this.customer = customer;
     this.partner = partner;
     this.type = type;

@@ -18,6 +18,9 @@ export class ParkingLog {
   type!: ParkingType;
 
   @Column()
+  parkingPlaceId: number;
+
+  @Column()
   vehicle: string;
 
   @Column()
