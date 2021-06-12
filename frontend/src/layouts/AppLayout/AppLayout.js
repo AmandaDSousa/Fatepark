@@ -1,5 +1,4 @@
-import {useState} from "react";
-import {useHistory} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import {Menu, Layout} from "antd";
 import {CarOutlined, FileTextOutlined, UserOutlined} from "@ant-design/icons";
 
@@ -22,12 +21,10 @@ const menus = {
 }
 
 export function AppLayout({ children }) {
-  const [currentMenu, setCurrentMenu] = useState(menus.parkingLogs.key);
   const history = useHistory();
   const auth = useAuth();
 
   function handleClick(menu) {
-    setCurrentMenu(menu.key);
     history.replace(menu.route);
   }
 
@@ -35,9 +32,15 @@ export function AppLayout({ children }) {
     auth.logout(() => history.replace("login"));
   }
 
+  const location = useLocation()
+  const currentMenu = Object.entries(menus)
+    .map(([_, menu]) => menu)
+    .find(menu => menu.route === location.pathname.replace("/", ""))
+  const selectedKey = currentMenu.key
+
   return (
     <Layout>
-      <Menu selectedKeys={[currentMenu]} mode="horizontal">
+      <Menu defaultSelectedKeys={[selectedKey]} mode="horizontal">
         <Menu.Item onClick={() => handleClick(menus.parkingPlaces)} key={menus.parkingPlaces.key} icon={<CarOutlined />}>
           Vagas
         </Menu.Item>
