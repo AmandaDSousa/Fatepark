@@ -22,7 +22,7 @@ const menus = {
 }
 
 export function AppLayout({ children }) {
-  const [currentMenu, setCurrentMenu] = useState(menus.users.key);
+  const [currentMenu, setCurrentMenu] = useState(menus.parkingLogs.key);
   const history = useHistory();
   const auth = useAuth();
 
