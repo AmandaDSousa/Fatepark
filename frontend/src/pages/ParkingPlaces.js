@@ -3,6 +3,7 @@ import {Col, Drawer, message, Row, Space, Table, Typography} from "antd";
 import moment from "moment";
 import {parkingPlacesService} from "../services/parkingPlacesService";
 import {ParkingPlaceEntrance} from "./ParkingPlaceEntrance";
+import {ParkingPlaceExit} from "./ParkingPlaceExit";
 
 const PAGE_SIZE = 10;
 
@@ -14,6 +15,8 @@ export function ParkingPlaces() {
   const [occupiedRelation, setOccupiedRelation] = useState({occupiedCount: 0, totalCount: 0});
   const [entranceDrawerVisible, setEntranceDrawerVisible] = useState(false);
   const [enteringParkingPlace, setEnteringParkingPlace] = useState(null);
+  const [exitDrawerVisible, setExitDrawerVisible] = useState(false);
+  const [exitingParkingPlace, setExitingParkingPlace] = useState(null);
 
   useEffect(() => {
     getParkingPlaces(currentPage)
@@ -56,7 +59,7 @@ export function ParkingPlaces() {
       render: (_, record) => (
         <Space>
           {record.isOccupied ? (
-            <a>Saída</a>
+            <a onClick={() => onExit(record)}>Saída</a>
           ) : (
             <a onClick={() => onEntrance(record)}>Entrada</a>
           )}
@@ -102,6 +105,17 @@ export function ParkingPlaces() {
     await getParkingPlaces(currentPage);
   }
 
+  function onExit(parkingPlace) {
+    setExitingParkingPlace(parkingPlace)
+    setExitDrawerVisible(true)
+  }
+
+  async function onExitDrawerClose() {
+    setExitingParkingPlace(null);
+    setExitDrawerVisible(false);
+    await getParkingPlaces(currentPage);
+  }
+
   const {occupiedCount, totalCount} = occupiedRelation
 
   return (
@@ -129,7 +143,7 @@ export function ParkingPlaces() {
 
       <Drawer
         width={500}
-        title={"Entrada para vaga"}
+        title={"Entrada de vaga"}
         placement="right"
         onClose={onEntranceDrawerClose}
         visible={entranceDrawerVisible}
@@ -137,6 +151,20 @@ export function ParkingPlaces() {
         <ParkingPlaceEntrance
           parkingPlace={enteringParkingPlace}
           onFinish={onEntranceDrawerClose}
+        />
+      </Drawer>
+
+      <Drawer
+        width={500}
+        title={"Saída de vaga"}
+        placement="right"
+        onClose={onExitDrawerClose}
+        visible={exitDrawerVisible}
+      >
+        <ParkingPlaceExit
+          destroyOnClose={true}
+          parkingPlace={exitingParkingPlace}
+          onFinish={onExitDrawerClose}
         />
       </Drawer>
     </div>
