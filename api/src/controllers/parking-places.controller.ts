@@ -100,7 +100,7 @@ export class ParkingPlacesController {
     if (!customerId)
       return new BadRequestException("Cliente é obrigatório para preencher vaga de assinante");
 
-    if (parkingPlace.isOccupied && parkingPlace.customer.id !== customerId)
+    if (parkingPlace.isOccupied && parkingPlace.customer?.id !== customerId)
       return new BadRequestException("A vaga já está ocupada por outro cliente");
 
     const customer: Customer = await this.customersService.getById(customerId);
