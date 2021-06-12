@@ -11,9 +11,15 @@ export function parkingPlacesService() {
     return { items, count };
   }
 
+  async function getOccupiedRelation() {
+    const response = await apiBaseService.get(`${resource}/occupied-relation`);
+
+    return response.data
+  }
+
   function update(user) {
     return apiBaseService.put(`${resource}/${user.id}`, user);
   }
 
-  return { getAllPaged, update }
+  return { getAllPaged, getOccupiedRelation, update }
 }
