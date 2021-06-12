@@ -9,6 +9,7 @@ import {PrivateRoute} from "./components/PrivateRoute";
 import {LoginRoute} from "./components/LoginRoute";
 import {Users} from "./pages/Users";
 import {ParkingPlaces} from "./pages/ParkingPlaces";
+import {ParkingLogs} from "./pages/ParkingLogs";
 
 function App() {
   return (
@@ -25,6 +26,9 @@ function App() {
                 <Switch>
                   <PrivateRoute path={"/"} exact>
                     <ParkingPlaces/>
+                  </PrivateRoute>
+                  <PrivateRoute path={"/parking-logs"} exact>
+                    <ParkingLogs/>
                   </PrivateRoute>
                   <PrivateRoute path={"/users"} exact>
                     <Users/>
