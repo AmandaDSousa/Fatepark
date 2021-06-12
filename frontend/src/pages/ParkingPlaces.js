@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
-import {Col, message, Row, Space, Table, Typography} from "antd";
-import {parkingPlacesService} from "../services/parkingPlacesService";
+import {Col, Drawer, message, Row, Space, Table, Typography} from "antd";
 import moment from "moment";
+import {parkingPlacesService} from "../services/parkingPlacesService";
+import {ParkingPlaceEntrance} from "./ParkingPlaceEntrance";
 
 const PAGE_SIZE = 10;
 
@@ -11,6 +12,8 @@ export function ParkingPlaces() {
   const [currentPage, setPage] = useState(1);
   const [parkingPlaces, setParkingPlaces] = useState([]);
   const [occupiedRelation, setOccupiedRelation] = useState({occupiedCount: 0, totalCount: 0});
+  const [entranceDrawerVisible, setEntranceDrawerVisible] = useState(false);
+  const [enteringParkingPlace, setEnteringParkingPlace] = useState(null);
 
   useEffect(() => {
     getParkingPlaces(currentPage)
@@ -47,6 +50,19 @@ export function ParkingPlaces() {
       dataIndex: "entranceTime",
       render: (_, row) => row.entranceTime ? moment(row.entranceTime).format("HH:mm") : null
     },
+    {
+      title: "Ações",
+      dataIndex: "",
+      render: (_, record) => (
+        <Space>
+          {record.isOccupied ? (
+            <a>Saída</a>
+          ) : (
+            <a onClick={() => onEntrance(record)}>Entrada</a>
+          )}
+        </Space>
+      )
+    }
   ]
 
   async function getParkingPlaces(page) {
@@ -75,6 +91,17 @@ export function ParkingPlaces() {
     setPage(pagination.current);
   }
 
+  function onEntrance(parkingPlace) {
+    setEnteringParkingPlace(parkingPlace)
+    setEntranceDrawerVisible(true)
+  }
+
+  async function onEntranceDrawerClose() {
+    setEnteringParkingPlace(null);
+    setEntranceDrawerVisible(false);
+    await getParkingPlaces(currentPage);
+  }
+
   const {occupiedCount, totalCount} = occupiedRelation
 
   return (
@@ -99,6 +126,19 @@ export function ParkingPlaces() {
         dataSource={parkingPlaces}
         onChange={handleChange}
       />
+
+      <Drawer
+        width={500}
+        title={"Entrada para vaga"}
+        placement="right"
+        onClose={onEntranceDrawerClose}
+        visible={entranceDrawerVisible}
+      >
+        <ParkingPlaceEntrance
+          parkingPlace={enteringParkingPlace}
+          onFinish={onEntranceDrawerClose}
+        />
+      </Drawer>
     </div>
   )
 }

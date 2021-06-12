@@ -17,8 +17,8 @@ export function parkingPlacesService() {
     return response.data
   }
 
-  function update(user) {
-    return apiBaseService.put(`${resource}/${user.id}`, user);
+  function update(parkingPlace) {
+    return apiBaseService.put(`${resource}/${parkingPlace.id}`, parkingPlace);
   }
 
   return { getAllPaged, getOccupiedRelation, update }
