@@ -3,7 +3,7 @@ import {Button, Form, Input, message, Radio, Select, Space, Typography} from "an
 import MaskedInput from 'antd-mask-input'
 import {ParkingType} from "../enums/parking-type";
 import {parkingPlacesService} from "../services/parkingPlacesService";
-import {customerssService} from "../services/customersService";
+import {customersService} from "../services/customersService";
 
 const options = [
   { label: 'Avulso', value: ParkingType.Avulso  },
@@ -33,7 +33,7 @@ export function ParkingPlaceEntrance({ parkingPlace, onFinish }) {
   async function searchCustomerWithCpf(cpf) {
     try {
       setSearchingCustomers(true)
-      const customers = await customerssService().getAllWithCpf(cpf)
+      const customers = await customersService().getAllWithCpf(cpf)
       setCustomers(customers)
     } catch {
       message.error("Falha ao obter lista de clientes")

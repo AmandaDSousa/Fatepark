@@ -2,7 +2,7 @@ import {useState} from "react";
 import {Button, Form, message, Select, Typography} from "antd";
 
 import {paymentsService} from "../services/paymentsService";
-import {customerssService} from "../services/customersService";
+import {customersService} from "../services/customersService";
 import moment from "moment";
 
 export function PaymentForm({payment, onFinish}) {
@@ -36,7 +36,7 @@ export function PaymentForm({payment, onFinish}) {
   async function searchCustomerWithCpf(cpf) {
     try {
       setSearchingCustomers(true)
-      const customers = await customerssService().getAllWithCpf(cpf)
+      const customers = await customersService().getAllWithCpf(cpf)
       setCustomers(customers)
     } catch {
       message.error("Falha ao obter lista de clientes")

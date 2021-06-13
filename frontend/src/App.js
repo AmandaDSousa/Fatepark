@@ -11,6 +11,7 @@ import {Users} from "./pages/Users";
 import {ParkingPlaces} from "./pages/ParkingPlaces";
 import {ParkingLogs} from "./pages/ParkingLogs";
 import {Payments} from "./pages/Payments";
+import {Customers} from "./pages/Customers";
 
 function App() {
   return (
@@ -30,6 +31,9 @@ function App() {
                   </PrivateRoute>
                   <PrivateRoute path={"/parking-logs"} exact>
                     <ParkingLogs />
+                  </PrivateRoute>
+                  <PrivateRoute path={"/customers"} exact>
+                    <Customers />
                   </PrivateRoute>
                   <PrivateRoute path={"/payments"} exact>
                     <Payments />
