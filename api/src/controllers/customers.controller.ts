@@ -21,7 +21,7 @@ export class CustomersController {
   }
 
   @Get()
-  getAllWithPaid(
+  getAll(
     @Query() params,
   ) {
     try {
