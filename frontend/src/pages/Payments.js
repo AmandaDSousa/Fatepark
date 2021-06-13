@@ -24,6 +24,16 @@ export function Payments() {
       render: (_, row) => row.customer?.name
     },
     {
+      title: "Data de pagamento",
+      dataIndex: "paymentDate",
+      render: (_, row) => row.start ? moment(row.start).format("DD/MM/YYYY") : null
+    },
+    {
+      title: "Valor do pagamento",
+      dataIndex: "paymentDate",
+      render: () => formatToBrazilianCurrency(250)
+    },
+    {
       title: "Início do plano",
       dataIndex: "start",
       render: (_, row) => row.start ? moment(row.start).format("DD/MM/YYYY") : null
