@@ -26,6 +26,7 @@ import {ParkingLogsController} from "./controllers/parking-logs.controller";
 import {Payment} from "./entities/payment.entity";
 import {PaymentsController} from "./controllers/payments.controller";
 import {PaymentsService} from "./services/payments.service";
+import {PartnersController} from "./controllers/partners.constroller";
 
 @Module({
   imports: [
@@ -41,7 +42,8 @@ import {PaymentsService} from "./services/payments.service";
     CustomersController,
     ParkingPlacesController,
     ParkingLogsController,
-    PaymentsController
+    PaymentsController,
+    PartnersController
   ],
   providers: [
     LocalStrategy,

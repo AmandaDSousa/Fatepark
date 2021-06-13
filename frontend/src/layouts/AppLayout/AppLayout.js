@@ -1,6 +1,13 @@
 import {useHistory, useLocation} from "react-router-dom";
 import {Menu, Layout} from "antd";
-import {CarOutlined, DollarOutlined, FileTextOutlined, UserOutlined, TeamOutlined} from "@ant-design/icons";
+import {
+  CarOutlined,
+  DollarOutlined,
+  FileTextOutlined,
+  UserOutlined,
+  TeamOutlined,
+  ShopOutlined
+} from "@ant-design/icons";
 
 import "./AppLayout.css";
 import {useAuth} from "../../hooks/useAuth";
@@ -13,6 +20,10 @@ const menus = {
   parkingLogs: {
     key: "parking-logs",
     route: "parking-logs"
+  },
+  partners: {
+    key: "partners",
+    route: "partners"
   },
   customers: {
     key: "customers",
@@ -54,6 +65,9 @@ export function AppLayout({ children }) {
         </Menu.Item>
         <Menu.Item onClick={() => handleClick(menus.parkingLogs)} key={menus.parkingLogs.key} icon={<FileTextOutlined />}>
           Relatório de vagas
+        </Menu.Item>
+        <Menu.Item onClick={() => handleClick(menus.partners)} key={menus.partners.key} icon={<ShopOutlined />}>
+          Convênios
         </Menu.Item>
         <Menu.Item onClick={() => handleClick(menus.customers)} key={menus.customers.key} icon={<TeamOutlined />}>
           Clientes

@@ -12,6 +12,7 @@ import {ParkingPlaces} from "./pages/ParkingPlaces";
 import {ParkingLogs} from "./pages/ParkingLogs";
 import {Payments} from "./pages/Payments";
 import {Customers} from "./pages/Customers";
+import {Partners} from "./pages/Partners";
 
 function App() {
   return (
@@ -31,6 +32,9 @@ function App() {
                   </PrivateRoute>
                   <PrivateRoute path={"/parking-logs"} exact>
                     <ParkingLogs />
+                  </PrivateRoute>
+                  <PrivateRoute path={"/partners"} exact>
+                    <Partners />
                   </PrivateRoute>
                   <PrivateRoute path={"/customers"} exact>
                     <Customers />
