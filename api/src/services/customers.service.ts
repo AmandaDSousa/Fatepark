@@ -36,9 +36,10 @@ export class CustomersService {
     if (paid) {
       return this.customersRepository
         .createQueryBuilder("customer")
-        .select(selectColumns)
-        .innerJoin(Payment, "payment", "payment.customerId=customer.id")
+        .select(["customer.id AS \"id\"", "name", "cpf"])
+        .innerJoin(Payment, "payment", "payment.customerId = customer.id")
         .where("\"isActive\" = true")
+        .andWhere(`\"cpf\" LIKE '${cpf === '' ? "NOTVALID" : cpf}%'`)
         .andWhere("start <= CURRENT_DATE")
         .andWhere("\"end\" >= CURRENT_DATE")
         .printSql()

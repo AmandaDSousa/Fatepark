@@ -25,7 +25,7 @@ export class CustomersController {
     @Query() params,
   ) {
     try {
-      return this.customersService.getAll(!!params.paid, params.cpf);
+      return this.customersService.getAll(params.paid, params.cpf);
     } catch (e) {
       return new InternalServerErrorException(e);
     }

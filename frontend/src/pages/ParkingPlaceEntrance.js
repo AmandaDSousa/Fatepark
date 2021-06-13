@@ -48,7 +48,7 @@ export function ParkingPlaceEntrance({ parkingPlace, onFinish }) {
   async function searchCustomerWithCpf(cpf) {
     try {
       setSearchingCustomers(true)
-      const customers = await customersService().getAllWithCpf(cpf)
+      const customers = await customersService().getAllPaidWithCpf(cpf)
       setCustomers(customers)
     } catch {
       message.error("Falha ao obter lista de clientes")

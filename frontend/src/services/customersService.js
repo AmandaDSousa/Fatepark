@@ -28,5 +28,10 @@ export function customersService() {
     return response.data
   }
 
-  return { getAllPaged, create, update, deleteCustomer, getAllWithCpf }
+  async function getAllPaidWithCpf(cpf) {
+    const response = await apiBaseService.get(resource, { params: { cpf, paid: true } });
+    return response.data
+  }
+
+  return { getAllPaged, create, update, deleteCustomer, getAllWithCpf, getAllPaidWithCpf }
 }
