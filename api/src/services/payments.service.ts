@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common';
-import {Between, FindManyOptions, LessThan, MoreThanOrEqual, Repository} from "typeorm";
+import {Between, FindManyOptions, Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 
 import {Payment} from "../entities/payment.entity";
@@ -20,7 +20,8 @@ export class PaymentsService {
       skip: page === 1 ? 0 : perPage * (page - 1),
       order: {
         createdAt: "ASC"
-      }
+      },
+      relations: ['customer']
     };
 
     return this.paymentsRepository.findAndCount(options);
