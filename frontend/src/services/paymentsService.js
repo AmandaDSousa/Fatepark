@@ -10,5 +10,10 @@ export function paymentsService() {
 
     return { items, count };
   }
-  return { getAllPaged }
+
+  function create(user) {
+    return apiBaseService.post(`${resource}`, user);
+  }
+
+  return { getAllPaged, create }
 }

@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
-import {Col, message, Row, Space, Table, Typography} from "antd";
+import {Button, Col, Drawer, message, Row, Space, Table, Typography} from "antd";
 import moment from "moment";
 
 import {formatToBrazilianCurrency} from "../utils/currency-utils";
 import {paymentsService} from "../services/paymentsService";
+import {PaymentForm} from "./PaymentForm";
 
 const PAGE_SIZE = 10;
 
@@ -12,6 +13,8 @@ export function Payments() {
   const [count, setCount] = useState(null);
   const [currentPage, setPage] = useState(1);
   const [payments, setPayments] = useState([]);
+  const [editingPayment, setEditingPayment] = useState(null);
+  const [showDrawer, setShowDrawer] = useState(false);
 
   useEffect(() => {
     getPayments(currentPage)
@@ -42,13 +45,6 @@ export function Payments() {
       title: "Fim do plano",
       dataIndex: "end",
       render: (_, row) => row.end ? moment(row.end).format("DD/MM/YYYY") : null
-    },
-    {
-      title: "Ações",
-      dataIndex: "",
-      render: (_, record) => (
-        <a onClick={() =>onEdit(record)}>Editar</a>
-      )
     }
   ]
 
@@ -69,8 +65,15 @@ export function Payments() {
     setPage(pagination.current);
   }
 
-  function onEdit(payment) {
+  function registerPayment() {
+    setEditingPayment(null);
+    setShowDrawer(true);
+  }
 
+  async function onDrawerClose() {
+    setEditingPayment(null);
+    setShowDrawer(false);
+    await getPayments(currentPage);
   }
 
   return (
@@ -78,6 +81,9 @@ export function Payments() {
       <Row align={"top"} justify={"space-between"}>
         <Col>
           <Typography.Title level={2}>Pagamentos</Typography.Title>
+        </Col>
+        <Col>
+          <Button type={"primary"} onClick={() => registerPayment()}>Registrar pagamento</Button>
         </Col>
       </Row>
 
@@ -89,6 +95,16 @@ export function Payments() {
         dataSource={payments}
         onChange={handleChange}
       />
+
+      <Drawer
+        width={500}
+        title={"Registrar pagamento"}
+        placement="right"
+        onClose={onDrawerClose}
+        visible={showDrawer}
+      >
+        <PaymentForm payment={editingPayment} onFinish={onDrawerClose} />
+      </Drawer>
     </div>
   )
 }
