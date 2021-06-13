@@ -19,8 +19,7 @@ export function ParkingPlaces() {
   const [exitingParkingPlace, setExitingParkingPlace] = useState(null);
 
   useEffect(() => {
-    getParkingPlaces(currentPage)
-    getOccupiedRelation()
+    getParkingInfo(currentPage)
   }, [currentPage])
 
   const columns = [
@@ -68,6 +67,10 @@ export function ParkingPlaces() {
     }
   ]
 
+  async function getParkingInfo(currentPage) {
+    await Promise.all([getParkingPlaces(currentPage), getOccupiedRelation()])
+  }
+
   async function getParkingPlaces(page) {
     try {
       setLoading(true)
@@ -102,7 +105,7 @@ export function ParkingPlaces() {
   async function onEntranceDrawerClose() {
     setEnteringParkingPlace(null);
     setEntranceDrawerVisible(false);
-    await getParkingPlaces(currentPage);
+    await getParkingInfo(currentPage);
   }
 
   function onExit(parkingPlace) {
@@ -113,7 +116,7 @@ export function ParkingPlaces() {
   async function onExitDrawerClose() {
     setExitingParkingPlace(null);
     setExitDrawerVisible(false);
-    await getParkingPlaces(currentPage);
+    await getParkingInfo(currentPage);
   }
 
   const {occupiedCount, totalCount} = occupiedRelation
