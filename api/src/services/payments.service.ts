@@ -19,7 +19,7 @@ export class PaymentsService {
       take: perPage,
       skip: page === 1 ? 0 : perPage * (page - 1),
       order: {
-        createdAt: "ASC"
+        createdAt: "DESC"
       },
       relations: ['customer']
     };
