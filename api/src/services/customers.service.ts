@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common';
-import {FindManyOptions, Repository} from "typeorm";
+import {FindManyOptions, Like, Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 
 import {Customer} from "../entities/customer.entity";
@@ -30,8 +30,8 @@ export class CustomersService {
     return this.customersRepository.findAndCount(options);
   }
 
-  async getAll(paid: boolean): Promise<{ name: string, cpf: string }[]> {
-    const selectColumns:(keyof Customer)[] = ["name", "cpf"];
+  async getAll(paid?: boolean, cpf?: string): Promise<{ name: string, cpf: string }[]> {
+    const selectColumns: (keyof Customer)[] = ["name", "cpf"];
 
     if (paid) {
       return this.customersRepository
@@ -43,6 +43,14 @@ export class CustomersService {
         .andWhere("\"end\" >= CURRENT_DATE")
         .printSql()
         .getRawMany();
+    }
+
+    if (cpf) {
+      return this.customersRepository
+        .find({
+          select: selectColumns,
+          where: { isActive: true, cpf: Like(`${cpf}%`) }
+        });
     }
 
     return this.customersRepository.find({ select: selectColumns, where: { isActive: true } });

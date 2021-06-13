@@ -21,11 +21,11 @@ export class CustomersController {
   }
 
   @Get()
-  getAll(
-    @Query('paid', ParseBoolPipe) paid?: boolean
+  getAllWithPaid(
+    @Query() params,
   ) {
     try {
-      return this.customersService.getAll(paid);
+      return this.customersService.getAll(!!params.paid, params.cpf);
     } catch (e) {
       return new InternalServerErrorException(e);
     }
