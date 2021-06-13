@@ -158,6 +158,7 @@ export function ParkingPlaces() {
         width={500}
         title={"Saída de vaga"}
         placement="right"
+        destroyOnClose={true}
         onClose={onExitDrawerClose}
         visible={exitDrawerVisible}
       >

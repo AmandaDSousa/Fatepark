@@ -36,6 +36,20 @@ export class PaymentsService {
     });
   }
 
+  async getCustomerLastPayment(customer: Customer) {
+    const options: FindManyOptions = {
+      order: {
+        createdAt: "DESC"
+      },
+      relations: ['customer'],
+      where: { customer }
+    };
+
+    const payments = await this.paymentsRepository.find(options);
+
+    return payments ? payments[0] : null;
+  }
+
   async create(start: string, end: string, customer: Customer): Promise<number> {
     const creatingPayment: QueryDeepPartialEntity<Payment> = {customer, start, end};
 

@@ -11,9 +11,15 @@ export function paymentsService() {
     return { items, count };
   }
 
+  async function getCustomerLast(customerId) {
+    const response = await apiBaseService.get(`${resource}/${customerId}/last-payment`);
+
+    return response.data
+  }
+
   function create(user) {
     return apiBaseService.post(`${resource}`, user);
   }
 
-  return { getAllPaged, create }
+  return { getAllPaged, getCustomerLast, create }
 }

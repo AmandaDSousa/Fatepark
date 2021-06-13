@@ -22,16 +22,20 @@ export class PaymentsController {
   ) {
   }
 
+  @Get(":customerId/last-payment")
+  async getCustomerLastPayment(
+    @Param("customerId", ParseIntPipe) customerId: number,
+  ) {
+    const customer = await this.customersService.getById(customerId);
+    return this.paymentsService.getCustomerLastPayment(customer);
+  }
+
   @Get(":page/:perPage")
   getAll(
     @Param("page", ParseIntPipe) page: number,
     @Param("perPage", ParseIntPipe) perPage: number
   ) {
-    try {
-      return this.paymentsService.getPaged(page, perPage);
-    } catch (e) {
-      return new InternalServerErrorException(e);
-    }
+    return this.paymentsService.getPaged(page, perPage);
   }
 
   @Post()
