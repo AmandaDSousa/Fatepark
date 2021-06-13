@@ -36,25 +36,21 @@ export class PaymentsController {
 
   @Post()
   async create(@Body() createDto: CreatePaymentDto) {
-    try {
-      const { customerId, start, end } = createDto;
+    const {customerId, start, end} = createDto;
 
-      if (Date.parse(start) >= Date.parse(end))
-        return new BadRequestException("A data de fim deve ser depois da data de início");
+    if (Date.parse(start) >= Date.parse(end))
+      throw new BadRequestException("A data de fim deve ser depois da data de início");
 
-      const alreadyExistsBetweenDates = await this.paymentsService.getBetweenDates(createDto.start, createDto.end) > 0;
+    const alreadyExistsBetweenDates = await this.paymentsService.getBetweenDates(createDto.start, createDto.end) > 0;
 
-      if (alreadyExistsBetweenDates)
-        return new BadRequestException("Já existe pagamento registrado entre essas datas");
+    if (alreadyExistsBetweenDates)
+      throw new BadRequestException("Já existe pagamento registrado entre essas datas");
 
-      const customer: Customer = await this.customersService.getById(customerId);
+    const customer: Customer = await this.customersService.getById(customerId);
 
-      if (!customer)
-        return new BadRequestException("Não existe cliente informado");
+    if (!customer)
+      throw new BadRequestException("Não existe cliente informado");
 
-      return this.paymentsService.create(createDto.start, createDto.end, customer);
-    } catch (e) {
-      return new InternalServerErrorException(e);
-    }
+    return this.paymentsService.create(createDto.start, createDto.end, customer);
   }
 }

@@ -31,7 +31,7 @@ export class CustomersService {
   }
 
   async getAll(paid?: boolean, cpf?: string): Promise<{ name: string, cpf: string }[]> {
-    const selectColumns: (keyof Customer)[] = ["name", "cpf"];
+    const selectColumns: (keyof Customer)[] = ["id", "name", "cpf"];
 
     if (paid) {
       return this.customersRepository
