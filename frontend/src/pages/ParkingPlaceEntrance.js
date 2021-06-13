@@ -4,6 +4,7 @@ import MaskedInput from 'antd-mask-input'
 import {ParkingType} from "../enums/parking-type";
 import {parkingPlacesService} from "../services/parkingPlacesService";
 import {customersService} from "../services/customersService";
+import {partnersService} from "../services/partnersService";
 
 const options = [
   { label: 'Avulso', value: ParkingType.Avulso  },
@@ -16,6 +17,8 @@ export function ParkingPlaceEntrance({ parkingPlace, onFinish }) {
   const [type, setType] = useState(ParkingType.Avulso);
   const [customers, setCustomers] = useState([]);
   const [searchingCustomers, setSearchingCustomers] = useState(false);
+  const [partners, setPartners] = useState([]);
+  const [searchingPartners, setSearchingPartners] = useState(false);
 
   useEffect(() => {
     if (parkingPlace === null) {
@@ -28,6 +31,18 @@ export function ParkingPlaceEntrance({ parkingPlace, onFinish }) {
 
   function onChange(event) {
     setType(event.target.value)
+  }
+
+  async function searchPartnerWithName(name) {
+    try {
+      setSearchingPartners(true)
+      const partners = await partnersService().getAllWithName(name)
+      setPartners(partners)
+    } catch {
+      message.error("Falha ao obter lista de convênios")
+    } finally {
+      setSearchingPartners(true)
+    }
   }
 
   async function searchCustomerWithCpf(cpf) {
@@ -93,6 +108,7 @@ export function ParkingPlaceEntrance({ parkingPlace, onFinish }) {
 
   const isAvulso = type === ParkingType.Avulso
 
+  const partnersOptions = partners.map(partner => <Select.Option key={partner.id} value={partner.id}>{partner.name}</Select.Option>);
   const customersOptions = customers.map(customer => <Select.Option key={customer.id} value={customer.id}>{customer.name} - {customer.cpf}</Select.Option>);
 
   return (
@@ -121,6 +137,24 @@ export function ParkingPlaceEntrance({ parkingPlace, onFinish }) {
               rules={[{ required: true, message: 'Placa é obrigatório' }]}
             >
               <MaskedInput mask="AAA-1111" />
+            </Form.Item>
+
+            <Form.Item
+              label="Convênio"
+              name="partnerId"
+            >
+              <Select
+                showSearch
+                placeholder={"Buscar convênio pelo nome"}
+                defaultActiveFirstOption={false}
+                showArrow={false}
+                filterOption={false}
+                loading={searchingPartners}
+                onSearch={searchPartnerWithName}
+                notFoundContent={null}
+              >
+                {partnersOptions}
+              </Select>
             </Form.Item>
 
             <Form.Item>

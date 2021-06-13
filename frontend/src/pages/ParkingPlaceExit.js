@@ -10,9 +10,11 @@ import {paymentsService} from "../services/paymentsService";
 export function ParkingPlaceExit({parkingPlace , onFinish}) {
   const [saving, setSaving] = useState(false);
   const [lastPayment, setLastPayment] = useState(null);
+  const isAvulso = parkingPlace?.type === ParkingType.Avulso
 
   useEffect(() => {
-    getCustomerLastPayment()
+    if (!isAvulso)
+      getCustomerLastPayment()
   }, [])
 
   async function getCustomerLastPayment() {
@@ -30,6 +32,7 @@ export function ParkingPlaceExit({parkingPlace , onFinish}) {
 
       const exitingParkingPlace = {
         ...parkingPlace,
+        partnerId: parkingPlace.partner?.id ?? null,
         customerId: parkingPlace.customer?.id ?? null,
         isOccupied: false
       };
@@ -46,11 +49,12 @@ export function ParkingPlaceExit({parkingPlace , onFinish}) {
     }
   }
 
-  const isAvulso = parkingPlace?.type === ParkingType.Avulso
   const start = moment(parkingPlace?.entranceTime)
   const end = moment()
   const occupiedHours = Math.ceil(moment.duration(end.diff(start)).asHours())
+  const discount = parkingPlace?.partner?.discount ?? 0
   const subTotal = occupiedHours * 10
+  const total = subTotal - discount
 
   return (
     <div>
@@ -58,6 +62,7 @@ export function ParkingPlaceExit({parkingPlace , onFinish}) {
         <Space direction="vertical" size={36}>
           <Space direction="vertical">
             <Typography.Text>Tipo: avulso</Typography.Text>
+            {parkingPlace.partner && <Typography.Text>Convênio: {parkingPlace.partner.name}</Typography.Text>}
           </Space>
 
           <Space direction="vertical">
@@ -69,8 +74,8 @@ export function ParkingPlaceExit({parkingPlace , onFinish}) {
           <Space direction="vertical">
             <Typography.Text>Valor/hora: {formatToBrazilianCurrency(subTotal)}</Typography.Text>
             <Typography.Text>Subtotal: {formatToBrazilianCurrency(subTotal)}</Typography.Text>
-            <Typography.Text>Desconto convênio: R$ 0,00</Typography.Text>
-            <Typography.Text strong={true}>Total: {formatToBrazilianCurrency(subTotal)}</Typography.Text>
+            <Typography.Text>Desconto convênio: {formatToBrazilianCurrency(discount)}</Typography.Text>
+            <Typography.Text strong={true}>Total: {formatToBrazilianCurrency(total)}</Typography.Text>
           </Space>
 
           <Button type="primary" onClick={() => exit()} loading={saving}>Dar saída</Button>

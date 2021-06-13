@@ -8,7 +8,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  Put,
+  Put, Query,
 } from '@nestjs/common';
 
 import {PartnersService} from "../services/partners-service";
@@ -18,6 +18,17 @@ import {UpdatePartnerDto} from "../dto/update-partner.dto";
 @Controller('partners')
 export class PartnersController {
   constructor(private partnersService: PartnersService) {
+  }
+
+  @Get()
+  getAll(
+    @Query('name') name: string,
+  ) {
+    try {
+      return this.partnersService.getAll(name);
+    } catch (e) {
+      return new InternalServerErrorException(e);
+    }
   }
 
   @Get(":page/:perPage")

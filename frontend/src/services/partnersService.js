@@ -23,5 +23,10 @@ export function partnersService() {
     return apiBaseService.delete(`${resource}/${id}`);
   }
 
-  return { getAllPaged, create, update, deletePartner }
+  async function getAllWithName(name) {
+    const response = await apiBaseService.get(resource, { params: { name } });
+    return response.data
+  }
+
+  return { getAllPaged, create, update, deletePartner, getAllWithName }
 }

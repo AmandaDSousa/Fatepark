@@ -1,6 +1,6 @@
 import {Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
-import {FindManyOptions, Repository} from "typeorm";
+import {FindManyOptions, Like, Repository} from "typeorm";
 
 import {Partner} from "../entities/partner.entity";
 import {CreatePartnerDto} from "../dto/create-partner.dto";
@@ -12,6 +12,16 @@ export class PartnersService {
     @InjectRepository(Partner)
     private partnersRepository: Repository<Partner>,
   ) {
+  }
+
+  async getAll(name: string): Promise<{ id: number, name: string }[]> {
+    const selectColumns: (keyof Partner)[] = ["id", "name"];
+
+    return this.partnersRepository
+      .find({
+        select: selectColumns,
+        where: {isActive: true, name: Like(`${name}%`)}
+      });
   }
 
   getPaged(page: number, perPage: number) {
