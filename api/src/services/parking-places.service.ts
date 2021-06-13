@@ -38,8 +38,12 @@ export class ParkingPlacesService {
     return { occupiedCount, totalCount }
   }
 
-  getById (id: number): Promise<ParkingPlace> {
+  getById(id: number): Promise<ParkingPlace> {
     return this.parkingPlacesRepository.findOne({ where: { id }, relations: ['customer'] });
+  }
+
+  getByCustomer(customer: Customer): Promise<ParkingPlace> {
+    return this.parkingPlacesRepository.findOne({ where: { customer } });
   }
 
   async occupyAvulso(id: number, vehicle: string, vehiclePlate: string, partner?: Partner): Promise<void> {

@@ -58,37 +58,33 @@ export class ParkingPlacesController {
     @Param("id", ParseIntPipe) id: number,
     @Body() updateDto: UpdateParkingPlaceDto
   ) {
-    try {
-      const parkingPlace = await this.parkingPlacesService.getById(id);
+    const parkingPlace = await this.parkingPlacesService.getById(id);
 
-      if (!parkingPlace)
-        return new BadRequestException("Não existe vaga com esse id");
+    if (!parkingPlace)
+      return new BadRequestException("Não existe vaga com esse id");
 
-      const isGettingOut = parkingPlace.isOccupied && !updateDto.isOccupied;
-      const isAvulso = updateDto.type === ParkingType.Avulso;
+    const isGettingOut = parkingPlace.isOccupied && !updateDto.isOccupied;
+    const isAvulso = updateDto.type === ParkingType.Avulso;
 
-      if (isGettingOut)
-        return await this.getOut(parkingPlace, updateDto);
-      else if (isAvulso)
-        return await this.occupyAvulso(parkingPlace, updateDto);
-      else
-        return await this.occupyAssinante(parkingPlace, updateDto.customerId);
-    } catch (e) {
-      return new InternalServerErrorException(e);
-    }
+    if (isGettingOut)
+      return await this.getOut(parkingPlace, updateDto);
+    else if (isAvulso)
+      return await this.occupyAvulso(parkingPlace, updateDto);
+    else
+      return await this.occupyAssinante(parkingPlace, updateDto.customerId);
   }
 
   async occupyAvulso(parkingPlace: ParkingPlace, updateDto: UpdateParkingPlaceDto) {
     const {partnerId, vehicle, vehiclePlate} = updateDto;
 
     if (!vehicle)
-      return new BadRequestException("Veículo é obrigatório para vaga avulsa");
+      throw new BadRequestException("Veículo é obrigatório para vaga avulsa");
 
     if (!vehiclePlate)
-      return new BadRequestException("Placa do veículo é obrigatório para vaga avulsa");
+      throw new BadRequestException("Placa do veículo é obrigatório para vaga avulsa");
 
     if (parkingPlace.isOccupied && parkingPlace.vehiclePlate !== vehiclePlate)
-      return new BadRequestException("A vaga já está ocupada por outro veículo");
+      throw new BadRequestException("A vaga já está ocupada por outro veículo");
 
     if (!partnerId) {
       await this.parkingPlacesService.occupyAvulso(parkingPlace.id, vehicle, vehiclePlate, null);
@@ -98,7 +94,7 @@ export class ParkingPlacesController {
     const partner: Partner = await this.partnersService.getById(partnerId);
 
     if (!partner)
-      return new BadRequestException("Não existe convênio com esse id");
+      throw new BadRequestException("Não existe convênio com esse id");
 
     await this.parkingPlacesService.occupyAvulso(parkingPlace.id, vehicle, vehiclePlate, partner);
 
@@ -107,15 +103,20 @@ export class ParkingPlacesController {
 
   async occupyAssinante(parkingPlace: ParkingPlace, customerId: number) {
     if (!customerId)
-      return new BadRequestException("Cliente é obrigatório para preencher vaga de assinante");
+      throw new BadRequestException("Cliente é obrigatório para preencher vaga de assinante");
 
     if (parkingPlace.isOccupied && parkingPlace.customer?.id !== customerId)
-      return new BadRequestException("A vaga já está ocupada por outro cliente");
+      throw new BadRequestException("A vaga já está ocupada por outro cliente");
 
     const customer: Customer = await this.customersService.getById(customerId);
 
     if (!customer)
-      return new BadRequestException("Não existe cliente com esse id");
+      throw new BadRequestException("Não existe cliente com esse id");
+
+    const customerParkingPlace = await this.parkingPlacesService.getByCustomer(customer)
+
+    if (customerParkingPlace && customerParkingPlace.id !== parkingPlace.id)
+      throw new BadRequestException("O cliente já está ocupando uma outra vaga");
 
     await this.parkingPlacesService.occupyAssinante(parkingPlace.id, customer);
 
@@ -126,7 +127,7 @@ export class ParkingPlacesController {
     await this.parkingPlacesService.getOut(parkingPlace.id);
 
     const {customerId, partnerId} = updateDto;
-    const { type, vehicle, vehiclePlate } = parkingPlace;
+    const {type, vehicle, vehiclePlate} = parkingPlace;
 
     const customer: Customer = await this.customersService.getById(customerId);
     const partner: Partner = await this.partnersService.getById(partnerId);
